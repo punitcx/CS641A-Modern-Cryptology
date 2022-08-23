@@ -1,0 +1,64 @@
+- 3.1: We used the mapping of characters defined above to convert the obtained ciphertext to binary and then, we used DesAnalysis.py to apply reverse final permutation on these binary ciphertexts to get $\left(L_{6} R_{6}\right)$ and $\left(L_{6}^{\prime} R_{6}^{\prime}\right)$, which is output of the $6^{t h}$ round of DES. We know that, $R_{5}=L_{6}$,
+therefore using the values $R_{5}$ and $R_{5}^{\prime}$, we computed output of Expansion box and input XOR of S-boxes for $6^{t h}$ round.
+- 3.2 : For the first characteristic mentioned above, $L_{5}=$ 04000000 and for the second characteristic $L_{5}=00000400$.
+We found output of permutation box by performing $L_{5} \oplus\left(R_{6} \oplus\right.$ $\left.R_{6}^{\prime}\right)$, then we applied inverse permutation on this value to obtain output XOR of S-boxes for $6^{t h}$ round.
+- 3.3: Let $E\left(R_{5}\right)=\alpha_{1} \alpha_{2} \cdots \alpha_{8}$ and $E\left(R_{5}^{\prime}\right)=\alpha_{1}^{\prime} \alpha_{2}^{\prime} \cdots \alpha_{8}^{\prime}$ and $\beta_{i}=\alpha_{i} \oplus k_{6, i}$ and $\beta_{i}^{\prime}=\alpha_{i}^{\prime} \oplus k_{6, i}$, where $\left|\alpha_{i}\right|=6=$ $\left|\alpha_{i}^{\prime}\right|$ and $k_{6}=k_{6,1} k_{6,2} \cdots k_{6,8}$. At this point, we know $\alpha_{i}, \alpha_{i}^{\prime}, \beta_{i} \oplus \beta_{i}^{\prime}$ and $\gamma_{i} \oplus \gamma_{i}^{\prime}$. We created a $8 * 64$ key matrix to store the number of times a key $k \in[1,64]$ satisfies the possibility of being a key to $S_{i}$ box, where $i \in[1,8]$.
+
+- 3.4: We computed the set $X_{i}=$
+$\left(\beta, \beta^{\prime}\right) \mid \beta \oplus \beta^{\prime}=\beta_{i} \oplus \beta_{i}^{\prime}$ and $S(\beta) \oplus S\left(\beta^{\prime}\right)=\gamma_{i} \oplus \gamma_{i}^{\prime}$.
+Then, we found the key k, such that $\alpha_{i} \oplus k=\beta$ and $\left(\beta, \beta^{\prime}\right) \in$
+$X_{i}$ for some $\beta^{\prime}$. For all the keys $\mathrm{k}$ which satisfied this condition
+for $S_{i}$ box, we incremented their count in the key matrix i.e.
+key_matrix[i][k] was incremented.
+- After performing the above analysis to find the keys, we obtained the following results for characteristic 4008000004000000 :
+
+$$
+\begin{array}{llll}
+\text { S-box } & \text { Max } & \text { Mean } & \text { Key } \\
+\text { S1 } & 146 & 68 & 45 \\
+\text { S2 } & 330 & 79 & 51 \\
+\text { S3 } & 121 & 70 & 37 \\
+\text { S4 } & 105 & 65 & 7 \\
+\text { S5 } & 157 & 70 & 62 \\
+\text { S6 } & 329 & 76 & 24 \\
+\text { S7 } & 182 & 71 & 19 \\
+\text { S8 } & 187 & 69 & 36
+\end{array}
+$$
+
+For this characteristic, in round $4, X O R$ will be zero for $S 2, S 5, S 6$, S7 and S8. Therefore, in round 6 these S-boxes will give the corresponding key bits of $K_{6}$. Also, it can be observed that a significant difference is seen in the maximum key frequency and mean key frequency for these S-boxes which further assures of these key values being correct. We proceeded by taking the key bits for $\mathrm{S} 2, \mathrm{~S} 5, \mathrm{~S} 6, \mathrm{~S} 7$ and $\mathrm{S} 8$ boxes as $51,7,24,19$ and 36 respectively.
+
+For characteristic 0020000800000400 we got the following result for the S-boxes:
+
+$\begin{array}{llll}\text { S-box } & \text { Max } & \text { Mean } & \text { Key } \\ \text { S1 } & 173 & 70 & 45 \\ \text { S2 } & 151 & 70 & 51 \\ \text { S3 } & 127 & 65 & 37 \\ \text { S4 } & 307 & 84 & 7 \\ \text { S5 } & 173 & 68 & 62 \\ \text { S6 } & 290 & 78 & 24 \\ \text { S7 } & 116 & 62 & 19 \\ \text { S8 } & 105 & 67 & 36\end{array}$
+
+For this characteristic, in round 4 , XOR will be zero for $\mathrm{S} 1, \mathrm{~S} 2, \mathrm{~S} 4$, S5 and S6. Therefore, in round 6 these S-boxes will give the corresponding key bits of $K_{6}$. Also, it can be observed that a significant difference is seen in the maximum key frequency and mean key frequency for these S-boxes. We proceeded by taking the key bits for $\mathrm{S} 1, \mathrm{~S} 2, \mathrm{~S} 4, \mathrm{~S} 5$ and $\mathrm{S} 6$ boxes as $45,51,7,62$ and 24 respectively.
+
+Now, S2,S5 and S6 are common in both the Characteristics. 
+So now, we took key values for $\mathrm{S} 1, \mathrm{~S} 2, \mathrm{~S} 4, \mathrm{~S} 5$, S6, S7 and S8 as 45, 51, 7, 62, 24, 19 and 36 for round key $K_{6}$. So, now we have 42 bits of the 56 bit key.
+
+We used the key scheduling algorithm and got the following partial master key:
+\textbf{X11XX1XX01011X100XX11X11000X1010111X00001001X11X0110X001}
+
+Here $X$ is for unknown bits.
+- Now, we have 14 unknown bits and for these 14 unknown bits of DES key, we iterate through all $2^{14}$ possible permutations of the key to find the correct key. Using plaintext as "dddddddd dddddddd" and the corresponding ciphertext as "ofjopjgi iodmmrkj", we tried 6 round DES encryption.The key which gave the correct cipher is the final key. After running our code, we got the correct key as:
+\textbf{01101110010111100111101100001010111100001001111101100001}
+
+We also found the 48 bit round key for all the 6-rounds using this key, which were as follows:
+\textbf{Round 1 111011000100111100000111000011110110110110101001}
+\textbf{Round 2 011011110011011101100010001001000111111010110011}
+\textbf{Round 3 111010101101010011101101111111110000100001110011}
+\textbf{Round 4 110110011100001101011010100001111100101101011010}
+\textbf{Round 5 001001001101101110111011000101011011011101010100}
+\textbf{Round 6 101101110011100101000111111110011000010011100100}
+
+The above process was done by using DesAnalysis.py
+
+The ciphertext that we had got after reaching the game screen was "nghnffiqrskpkgmkgfkspsrknneojrhk". The ascii mapping for this was [163, 74, 34, 93, 239, 124, 115, 151, 50, 127, 207, 231, 170, 27, 110, 71].Since, each character is represented by 4 bits, so this is 128 bit string or 2 blocks of DES Cipher.
+ We decrypted this ciphertext using decrypt.cpp and got the plaintext as:
+ 
+\textbf{"nrtqhwijie000000"}
+After removing the padded 0's, we finally got:
+\textbf{Password: nrtqhwijie}
+
+This was our password which we used to clear the level.

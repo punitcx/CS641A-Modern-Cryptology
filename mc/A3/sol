@@ -1,0 +1,26 @@
+Commands: go enter pick c c back give back back thrnxxtzy read
+1st: go
+2nd: give
+3rd: back back and thrnxxtzy (Speak out the magic words ``thrnxxtzy'' for the hidden door to become visible. The door lies in the first chamber)
+4th: read
+Password for this level is an element of the multiplicative
+	group Z_p^* where p = 455470209427676832372575348833 is a prime.
+	You carefully look around and find three pairs of numbers of the
+	form (a, password * g^a) where g is a element in Z_p^* and a is
+	an integer. The g in each pair is the same.
+
+			(429,  431955503618234519808008749742)
+			(1973, 176325509039323911968355873643)
+			(7596, 98486971404861992487294722613)
+
+	You desperately start searching for more numbers and find
+
+			5___50__4_____31_____94__9
+
+	This looks like g but most of the entries are missing. Speak
+	out the password loudly to pass this level!
+
+got x^-1 = 70749996790223471732904681640
+got y^-1 = 176325509039323911968355873643
+
+Password: 134721542097659029845273957
